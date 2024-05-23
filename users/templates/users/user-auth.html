@@ -1,0 +1,10 @@
+<form method="post">
+      {% csrf_token %}
+      {{ form }}
+      {% if error %}
+        <div class="alert alert-danger" role="alert">
+          {{ error }}
+        </div>
+      {% endif %}
+      <button type="submit" class="btn btn-primary">Submit</button>
+</form>      
