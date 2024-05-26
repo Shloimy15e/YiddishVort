@@ -1,11 +1,14 @@
-document.addEventListener('DOMContentLoaded', () => {
-    alert('js loaded');
-});
+/**
+ * Handles the login form submission, sends a POST request to the server, and processes the response.
+ * @param {Event} e - The click event triggering the form submission.
+ */
 const loginSubmit = document.getElementById('login-submit');
 const errorMessage = document.getElementById('error-message');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+
 loginSubmit.addEventListener('click', async (e) => {
     e.preventDefault();
-    alert('hello');
     /* Get the username and password from the form
     and use fetch to send a POST request to the server
     with the data and expect a JWT token as a response.
@@ -13,14 +16,14 @@ loginSubmit.addEventListener('click', async (e) => {
     localStorage and redirect the user to the home page.
     */
     try {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+        const username = usernameInput.value;
+        const password = passwordInput.value;
 
         validateInput(username, password);
 
-        const token = await login(username, password);
-
-        storeUserData(user, token);
+        const { user, access, refresh } = await login(username, password);
+                
+        storeUserData(user, access, refresh);
 
         window.location.href = '/';
     } catch (error) {
@@ -32,21 +35,21 @@ loginSubmit.addEventListener('click', async (e) => {
 }
 );
 
-function getCsrfToken() {
-    return document.querySelector('[name=csrfmiddlewaretoken]').value;
-}
-
 function validateInput(username, password){
     if (username === '') { throw new Error('Please enter a username'); }
     if (password === '') { throw new Error('Please enter a password'); }
 }
 
+/**
+ * Logs in a user with the provided username and password.
+ * @param {string} username - The username of the user.
+ * @param {string} password - The password of the user.
+ * @returns {Promise<Object>} - A promise that resolves to the response JSON object.
+ * @throws {Error} - If there is a network response error.
+ */
 async function login(username, password) {            
-    // If all data was entered create a loginData object
     const loginData = { username, password };
     const csrfToken = getCsrfToken();
-    // Disable the login button to prevent multiple login requests
-    loginSubmit.disabled = true;
 
     const response = await fetch('/api/auth/login/', {
           method: 'POST',
@@ -57,16 +60,12 @@ async function login(username, password) {
           body: JSON.stringify(loginData)
     })
     if (!response.ok) {
-        throw new Error('Network response error: ' + response.status + ' ' + response.statusText);
+        const errorData = await response.json();
+        throw new Error('Network response error: ' + errorData.error);
     }
     
     // Get the token from the response
-    const data = await response.json();
-    const access_token = data.access;
-    const refresh_token = data.refresh;
-    const user = data.user;
-    // Return the tokens and user information
-    return (access_token, refresh_token, user);
+    return response.json();
 }
 
 function getErrorMessage(error) {
@@ -74,8 +73,15 @@ function getErrorMessage(error) {
     return error.message;
 }
 
-function storeUserData(user, token) {
-    // Get the user data and store it in localStorage 
-    localStorage.setItem('user', JSON.stringify(user));
-    localStorage.setItem('token', token);
+function getCsrfToken() {
+    // Get the CSRF token from the form
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+}
+
+function storeUserData(user, access, refresh) {
+    // Store the user data in localStorage
+    localStorage.setItem('user', user);
+    localStorage.setItem('access', access);
+    localStorage.setItem('refresh', refresh);
+    
 }
