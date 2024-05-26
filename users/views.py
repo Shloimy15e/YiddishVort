@@ -5,11 +5,7 @@ It includes a FormView subclass for handling the display and submission of the U
 
 from django.shortcuts import render
 from django.views.generic import FormView
-from django.contrib.auth import authenticate
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken
+from django.views.generic import TemplateView
 from .forms import UserRegistrationForm
 from .forms import UserLoginForm
 
@@ -28,7 +24,7 @@ class UserRegistrationFormView(FormView):
           success_url (str): The URL to redirect to upon successful form submission.
     """
 
-    template_name = "users/user-auth.html"
+    template_name = "users/registration.html"
     form_class = UserRegistrationForm
     success_url = "/login"
 
@@ -63,3 +59,12 @@ class UserRegistrationFormView(FormView):
         return render(
             self.request, self.template_name, {"form": form}
         )
+        
+class UserLoginTemplateView(TemplateView):
+    """
+    A view for user login form.
+    This view displays a user login form but does not handle the form submission.
+    Instead, the form submission is handled by the UserLoginView in the api module.
+    """
+    template_name = "users/login.html"
+    

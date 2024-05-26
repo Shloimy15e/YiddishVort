@@ -1,6 +1,10 @@
+"""
+Users app urls.
+"""
+
 from django.urls import path
 from . import views
 urlpatterns = [
     path('register/', views.UserRegistrationFormView.as_view(), name='register'),
-    #path('login/', views.UserLoginView.as_view(), name='login'),
+    path('login/', views.UserLoginTemplateView.as_view(), name='login'),
 ]
