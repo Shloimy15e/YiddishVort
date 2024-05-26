@@ -1,7 +1,13 @@
+"""
+This module contains views related to user registration.
+
+It includes a FormView subclass for handling the display and submission of the UserCreationForm.
+"""
+
 from django.shortcuts import render
-from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import FormView
 
+from .forms import UserRegistrationForm
 
 class UserRegistrationFormView(FormView):
     """
@@ -9,7 +15,8 @@ class UserRegistrationFormView(FormView):
 
     This view displays a user registration form and handles the form submission.
     Upon successful form submission, the user is registered and redirected to the login page.
-    If the form submission is invalid, the user is shown the registration form again with an error message.
+    If the form submission is invalid, the user is shown the registration form
+    again with an error message.
 
     Attributes:
           template_name (str): The name of the template to be rendered.
@@ -18,7 +25,7 @@ class UserRegistrationFormView(FormView):
     """
 
     template_name = "users/user-auth.html"
-    form_class = UserCreationForm
+    form_class = UserRegistrationForm
     success_url = "/login"
 
     def form_valid(self, form):
@@ -51,5 +58,5 @@ class UserRegistrationFormView(FormView):
               HttpResponse: The rendered template with the form and error message.
         """
         return render(
-            self.request, self.template_name, {"form": form, "error": "Invalid data"}
+            self.request, self.template_name, {"form": form}
         )
