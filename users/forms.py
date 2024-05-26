@@ -99,3 +99,19 @@ class UserRegistrationForm(forms.Form):
             email=email,
             password=password,
         )
+
+class UserLoginForm(forms.Form):
+    """
+    This is a form for user login.
+    """
+    username = forms.CharField(
+        label="Username",
+        max_length=30,
+        required=True,
+        help_text="Enter your username",
+    )
+    password = forms.CharField(
+        label="Password",
+        widget=forms.PasswordInput,
+        help_text="Enter your password",
+    )

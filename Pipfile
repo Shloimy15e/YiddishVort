@@ -10,6 +10,7 @@ django-restframework = "*"
 mysqlclient = "*"
 pylint = "*"
 django-debug-toolbar = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 

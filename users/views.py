@@ -1,13 +1,17 @@
 """
 This module contains views related to user registration.
-
 It includes a FormView subclass for handling the display and submission of the UserCreationForm.
 """
 
 from django.shortcuts import render
 from django.views.generic import FormView
-
+from django.contrib.auth import authenticate
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
 from .forms import UserRegistrationForm
+from .forms import UserLoginForm
 
 class UserRegistrationFormView(FormView):
     """
@@ -31,8 +35,7 @@ class UserRegistrationFormView(FormView):
     def form_valid(self, form):
         """
         Handle valid form submission.
-
-              This method is called when the form submission is valid.
+        This method is called when the form submission is valid.
         It saves the form data and returns the result of the parent class's form_valid method.
 
         Args:
