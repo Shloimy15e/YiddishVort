@@ -8,5 +8,9 @@
     <div class="alert alert-danger" role="alert" id="error-message">
     </div>
     <button type="submit" id="login-submit" class="btn btn-primary">Submit</button>
-</form>      
-<script src="{% static 'js/login.js' %}"></script>
+</form>
+<button id="logout-button" class="btn btn-primary">Logout</button>
+<button id="check-token-button" class="btn btn-primary">Check Token</button>
+<script src="{% static 'js/handleLogin.js' %}" type="module"></script>
+<script src="{% static 'js/handleLogout.js' %}" type="module"></script>
+<script src="{% static 'js/checkToken.js' %}"></script>
