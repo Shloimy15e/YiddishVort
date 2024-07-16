@@ -9,6 +9,7 @@ from django.views.generic import TemplateView
 from .forms import UserRegistrationForm
 from .forms import UserLoginForm
 
+
 class UserRegistrationFormView(FormView):
     """
     A view for user registration form.
@@ -56,15 +57,14 @@ class UserRegistrationFormView(FormView):
         Returns:
               HttpResponse: The rendered template with the form and error message.
         """
-        return render(
-            self.request, self.template_name, {"form": form}
-        )
-        
+        return render(self.request, self.template_name, {"form": form})
+
+
 class UserLoginTemplateView(TemplateView):
     """
     A view for user login form.
     This view displays a user login form but does not handle the form submission.
     Instead, the form submission is handled by the UserLoginView in the api module.
     """
+
     template_name = "users/login.html"
-    
